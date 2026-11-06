@@ -1,0 +1,29 @@
+Michael
+1. Combat System
+Inputs:
+Left Click – Light Attack
+Right Click – Heavy Attack
+Space – Dodge
+F – Parry
+Weapons:
+Daggers: Fast, short range. 8–15 damage.
+Swords: Balanced speed and range. 10–20 damage.
+Greatswords: Slow, high damage. 18–30 damage.
+Spears: Long range, moderate damage. 10–18 damage.
+Rules and Numbers:
+Players have 100 stamina, regenerating 15 per second.
+Attacks consume 5–30 stamina depending on the weapon.
+Dodging costs 15 stamina and provides 0.3 seconds of invincibility.
+Parrying costs 10 stamina and staggers enemies for 1.5 seconds.
+2. Weapon Mastery System
+Input: Uses combat controls.
+Rules and Numbers:
+Defeating enemies grants 5 mastery XP for the equipped weapon.
+At 25 XP, players unlock a new combo.
+At 50 XP, players unlock a special attack costing 30 stamina.
+Each weapon has its own mastery progression.
+How They Interact:
+Combat allows players to fight using different weapons, while Weapon Mastery rewards continued use by unlocking new attacks and combos.
+Then, for each of your mechanics, one sentence on which of your others it changes and how.
+Combat System → Evan’s Enemies: Different weapon types, attacks, dodges, and parries change how players fight enemies, allowing them to deal damage, avoid attacks, and stagger enemies.
+Weapon Mastery System → Evan’s Enemies: Unlocking new combos at 25 XP and special attacks at 50 XP gives players additional ways to fight enemies and bosses, changing how combat encounters play out.

@@ -1,78 +1,92 @@
-Anthony
-Branched world generation: The world will be procedurally generated consisting of 5 total arenas and 4 special rooms. These rooms are arenas, rest sites, shops, and mystery rooms. The rooms will alternate from special rooms to combat rooms. Out of the three special rooms, only two are spawning giving each a 66% chance of appearing after combat. To select the room you want to go to, the player must walk through one of the doorways that appears after a combat ends. The doors close after the player walks through and gives them the option only to progress to a combat room after.
-Purchasing/Selling: The player can exchange their currency to buy items to add to their inventory. They can also exchange their items to get currency (the shop will give the player 50% of the items brand new value). The player will use their mouse to look at each item in their inventory and the shop and make selections by left clicking. There will be buttons present that lets the player choose to buy, sell or leave. The cost of items scale with its rarity. Each tier of rarity increases its cost by an additional 25% from the base (ex: common 100, uncommon 125, rare 150, epic, 175, legendary 200)
-Resting: At resting site rooms there will be a sleeping bag, a campfire, and a workbench. The player will have to choose one of the three to walk up to and press E to sleep at the sleeping bag and heal for 50% of their maximum health, upgrade one of their stats by 20% (ex: increase speed by 20%), or upgrade an eligible item’s mastery progression by 20XP
-Mystery Rooms: Mystery rooms are activated as soon as the player enters them and they shuffle through multiple different things (each with a 20% chance of happening):
-Another arena fighting room
-A curse/debuff bestowed upon you (ex: -10% to a random stat you have)
-Robbery: You lose 25% of your currency or a random item in your inventory
-A buff bestowed upon you (ex: +10% to a random stat you have)
-Finding a skeleton with a random item for you to take.
-Jadin
-1. RNG / Item Drop System
-Input: No direct input is required. Item drops are automatically generated when an enemy is defeated.
-Rules and Numbers:
-When an enemy is defeated, it has a chance to drop an item that the player can collect. The item type and rarity are randomly determined using a probability-based loot system. Different enemy types have different drop chances and available loot pools.
-Regular enemies have a 60% chance to drop an item.
-Minibosses have a 100% chance to drop at least one item.
-Bosses have a 100% chance to drop at least one item, including a guaranteed rare or higher rarity item.
-When an item drops, its rarity is randomly determined using the following probabilities:
-Common: 59%
-Uncommon: 25%
-Rare: 12%
-Epic: 3%
-Legendary: 1%
-Bosses use a separate guaranteed rare-or-higher drop rule instead of the regular rarity distribution.
-Items can include weapons, consumables, and upgrade materials. Higher-rarity items can have stronger effects, increased damage, or additional benefits.
-How It Interacts With My Other Mechanic:
-The RNG Item Drop System affects the Inventory System because the type and rarity of the generated drops determine what items the player can collect, store, equip, and use.
-2. Inventory System
-Input:
-E – Pick up an item when standing within 2 meters of it.
-Tab – Open or close the inventory.
-Left Click – Select an item in the inventory.
-Left Click on Equip/Use – Equip a weapon or use a consumable.
-Left Click on Drop – Remove an item from the inventory and place it back into the world.
-Rules and Numbers:
-The player has an inventory with 12 available item slots. Each weapon occupies one slot and cannot be stacked. Consumable items and upgrade materials can stack up to 5 of the same item in one slot.
-When an enemy drops an item, the player must walk within 2 meters of it and press E to collect it. The item is automatically placed into the first available inventory slot.
-If the inventory is full, the player cannot collect additional items until they make room by using, selling, or dropping something.
-The player can equip one weapon at a time from their inventory and switch between collected weapons. Consumable items can also be used directly from the inventory.
-How It Interacts With My Other Mechanic:
-The Inventory System affects the RNG Item Drop System because the player's available inventory space determines whether newly generated drops can be collected. If the inventory is full, the player must make room before collecting additional drops.
+# The Ashen Bough
 
-Evan
-Enemies - (regular enemies, bosses, minibosses, final boss)
-Its name, and the input that does it.
-Enemies, if the player is visible or not, how it is attacked and how it attacks, what arena it is in from the arena mechanic.
-The rules and the numbers.
-Each enemy has 2 attacks and a set amount of health. It can only spawn in certain rooms and once health is 0, it must disappear.
-Arena - (3 types of arenas with different mechanics and environments, boss room)
-Its name, and the input that does it.
-Arena takes in what is chosen from the branched world generation mechanic.
-The rules and the numbers.
-Each room has an individual mechanic whether it be lava or acid rooms with subtle stage hazards with enemies roaming. The stage determines what enemies can spawn in.
-Michael
-1. Combat System
-Inputs:
-Left Click – Light Attack
-Right Click – Heavy Attack
-Space – Dodge
-F – Parry
-Weapons:
-Daggers: Fast, short range. 8–15 damage.
-Swords: Balanced speed and range. 10–20 damage.
-Greatswords: Slow, high damage. 18–30 damage.
-Spears: Long range, moderate damage. 10–18 damage.
-Rules and Numbers:
-Players have 100 stamina, regenerating 15 per second.
-Attacks consume 5–30 stamina depending on the weapon.
-Dodging costs 15 stamina and provides 0.3 seconds of invincibility.
-Parrying costs 10 stamina and staggers enemies for 1.5 seconds.
-2. Weapon Mastery System
-Input: Uses combat controls.
-Rules and Numbers:
-Defeating enemies grants 5 mastery XP for the equipped weapon.
-At 25 XP, players unlock a new combo.
-At 50 XP, players unlock a special attack costing 30 stamina.
-Each weapon has its own mastery progression.
+A playable third-person dark fantasy roguelite made in **Godot 4.7.2**. Carry an ember through five combat arenas and four branching special rooms, then defeat Veyr, the Ashen King.
+
+Combat uses deliberate attack commitments, stamina, dodge invulnerability, timed parries, lock-on, stagger, mastery finishers, and a special attack. Original low-poly models, generated pixel textures, fog, hard shadows, candlelight, and a restrained earthy palette follow the supplied art brief.
+
+## Play
+
+1. Import `project.godot` into Godot 4.7.2.
+2. Press **F5** and choose **Begin the pilgrimage**.
+3. Defeat the arena's enemies, collect drops with **E**, and walk through a lit doorway to choose your next room.
+
+No asset downloads, plugins, Python packages, or external services are needed to play. The Compatibility renderer is enabled. The game targets a 1280 × 720 layout and scales with the window.
+
+From a terminal with Godot on PATH:
+
+```powershell
+godot --path .
+```
+
+For a reproducible starting layout:
+
+```powershell
+godot --path . -- --seed=719
+```
+
+## Controls
+
+| Input | Action |
+| --- | --- |
+| WASD / arrow keys | Move relative to camera |
+| Mouse | Orbit camera |
+| Q / middle mouse | Toggle target lock |
+| Left click | Light attack; time repeated clicks to chain attacks |
+| Right click | Heavy attack; breaks enemy poise |
+| Space | Dodge; 15 stamina, 0.3 seconds of invulnerability |
+| F | Parry; 10 stamina, 0.25-second timing window |
+| R | Drink an Ember Draught |
+| C | Weapon special after 50 mastery XP; 30 stamina |
+| E | Collect loot / interact within 2 metres |
+| Tab | Inventory: select, equip, use, or drop |
+| Escape | Pause / close a menu |
+
+Face an enemy to parry its impact. A successful parry staggers it for 1.5 seconds; hitting a staggered enemy deals bonus damage. Red rings warn of strikes. Leave pauses between attacks to recover stamina. Inventory and other menus pause combat.
+
+## The run
+
+- **Five main arenas, four crossroads.** Three biomes are shuffled for the first three encounters. Arena three includes a miniboss; arena four includes a boss; arena five holds the final boss. Clearing each of the first four arenas samples two distinct special rooms uniformly from Rest, Shop, and Mystery. Each type therefore has a 2/3 chance of being offered. Walk through one doorway to commit to that branch.
+- **Three hazards.** Sepulchre grave mist pulses on and off; foundry cinders burn continuously; chapel blight deals damage and drains stamina. Layout details, hazard positions, enemy placements, branch choices, and rewards use the run's random seed.
+- **Rest sites.** Choose one benefit: the sleeping bag heals 50% of maximum health, the campfire improves a chosen stat by 20%, or the workbench grants 20 XP to the equipped weapon. The exit remains available if you want to leave without resting.
+- **Merchant.** Buy items for 100 / 125 / 150 / 175 / 200 embers according to rarity. Sell one item for 50% of its new price, rounded down. Equip another weapon before selling or dropping your current weapon. Merchant stock is replenishable during the visit.
+- **Mystery.** Five equally likely outcomes: an extra ambush, a random 10% stat curse, loss of 25% currency or a carried item, a random 10% stat blessing, or a loot offering. An ambush does not count as a main arena.
+- **Loot.** Regular enemies drop an item 60% of the time; minibosses and bosses always drop one. Normal rarity odds are 59 / 25 / 12 / 3 / 1 percent. Boss drops are rare or better. Enemy families have different loot pools. Embers are awarded directly; items require E to collect.
+- **Inventory.** Twelve slots, one weapon per slot, other items stacked to five. Four weapon families match the brief's base damage ranges. Rarity improves damage or healing. Mastery is stored on each individual weapon: kills grant 5 XP, 25 XP unlocks a third-strike combo finisher, and 50 XP unlocks C. Mastery Shards add 20 XP.
+- **Win / lose.** Defeating the final boss wins. Zero vitality ends the run. Start a fresh run or retry the same seed from the result screen. There is no persistent progression or mid-run save.
+
+## Project layout
+
+| File | Responsibility |
+| --- | --- |
+| `game/game.tscn`, `game/game.gd` | Startup, run sequence, transitions, encounters, rewards, interactions, effects, audio |
+| `game/run_state.gd` | Health, stats, currency, inventory, equipped weapon, mastery |
+| `game/data.gd` | Weapon definitions, rarity rolls, loot pools, item prices |
+| `game/knight.gd` | Third-person movement and camera, combat states, target lock |
+| `game/foe.gd` | Enemy awareness, steering, two attack patterns per family, telegraphs, stagger, boss phases |
+| `game/arena.gd` | Procedural room geometry, biome details, hazards, gates, rest props |
+| `game/low_poly.gd` | Original mesh construction and deterministic pixel textures |
+| `game/interface.gd` | Title, help, HUD, inventory, shop, rest, pause, results |
+| `game/retro.gdshader` | Pixel sampling, subtle dithering, desaturation, vignette |
+| `audio/`, `tools/generate_audio.py` | Original synthesized sound effects and looping ambience |
+| `tests/` | Headless integration checks and rendered screenshot capture |
+
+The earlier sprite prototype remains in `main.tscn`, `scripts/`, `sprites/`, and `resources/`. The new game is the project startup scene. Original mechanic notes are preserved in `docs/ORIGINAL_MECHANICS.md`; architecture and validation notes are in `docs/`.
+
+## Validate
+
+Open the project in Godot once to import assets, or import from the command line:
+
+```powershell
+godot --headless --path . --editor --import --quit
+godot --headless --path . --script res://tests/smoke_test.gd
+```
+
+The smoke test checks combat and input, loot probabilities, inventory boundaries, shop transactions, every mystery outcome, rest restrictions, main-path doorway transitions, victory, death, and restart. It uses direct damage to clear encounters during progression checks; it is not a balance or difficulty playthrough.
+
+To render title, gameplay, inventory, shop, rest, result, and boss screenshots into the ignored `.godot/` directory:
+
+```powershell
+godot --path . --script res://tests/visual_check.gd
+```
+
+Optional: `python tools/generate_audio.py` recreates the included WAV assets using only Python's standard library. Menus use locally available system serif fonts with fallbacks; no proprietary font files are bundled.

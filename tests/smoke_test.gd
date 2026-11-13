@@ -24,7 +24,7 @@ func run_checks() -> void:
 	check(game.ui.mode == "title", "Startup opens the title screen")
 	game.start_run(719)
 	await frames()
-	check(game.foes.size() == 3, "First arena spawns an encounter")
+	check(game.foes.size() == 2, "First arena spawns two goblins")
 	check(game.arena.hazards.size() == 2, "Arena contains environmental hazards")
 	check(game.arena.doors.is_empty(), "Exits remain closed during combat")
 	check(game.run.health == 100 and game.player.stamina == 100, "New run initializes vitality and stamina")
@@ -166,6 +166,17 @@ func run_checks() -> void:
 	var original_biomes: Array = game.biomes.duplicate()
 	for level in range(1, 6):
 		check(game.arena_number == level, "Main path reaches arena " + str(level))
+		var expected_foes := 1 if level == 5 else (2 if level <= 2 else 3)
+		check(game.foes.size() == expected_foes, "Arena %d has the expected enemy count" % level)
+		var kinds := {}
+		for target in game.foes:
+			check(target.has_method("_begin_goblin_attack"), "Arena %d uses a new goblin enemy" % level)
+			if level < 5:
+				kinds[target.kind] = true
+		check(kinds.size() <= 2, "Arena %d uses at most two goblin types" % level)
+		if level == 5:
+			check(game.foes[0].title == "The Gilded Hexlord", "Final arena contains only the goblin boss")
+			check(is_equal_approx(game.foes[0].max_health, 372.5), "Final boss health is halved")
 		game.player.invincible = 100
 		for target in game.foes.duplicate():
 			target.take_hit(10000, true, Vector3.ZERO)

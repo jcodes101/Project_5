@@ -1,6 +1,8 @@
 extends Node3D
 
 const EFFECT = preload("res://game/effect.gd")
+const GOBLIN_FOE = preload("res://game/goblin_foe.gd")
+const GOBLIN_BOSS = preload("res://game/goblin_boss.gd")
 var run: AshRun
 var player: AshKnight
 var arena: AshArena
@@ -165,24 +167,34 @@ func load_room(kind: String) -> void:
 
 func spawn_encounter() -> void:
 	if arena_number == 5:
-		spawn_foe("iron", Vector3(0, 0.1, -7), 2)
+		spawn_boss(Vector3(0, 0.1, -7))
 		return
-	var family: String = {"crypt": "stone", "briar": "briar", "forge": "iron"}[arena.biome]
+	var primary: String = {"crypt": "club", "briar": "caster", "forge": "missile"}[arena.biome]
+	var secondary: String = {"club": "caster", "caster": "missile", "missile": "club"}[primary]
+	var kinds: Array[String] = [primary, secondary]
+	if arena_number >= 3:
+		kinds.append(primary if arena_number == 3 else secondary)
 	var positions := [Vector3(-4.5, 0.1, -4), Vector3(4.5, 0.1, -8), Vector3(0, 0.1, -10)]
-	for i in positions.size():
-		var rank := 1 if (arena_number == 3 or arena_number == 4) and i == 2 else 0
-		var at: Vector3 = positions[i] + Vector3(rng.randf_range(-1.2, 1.2), 0, rng.randf_range(-1, 1))
-		spawn_foe(family, at, rank)
+	for i in kinds.size():
+		var at: Vector3 = positions[i] + Vector3(rng.randf_range(-0.8, 0.8), 0, rng.randf_range(-0.8, 0.8))
+		spawn_goblin(kinds[i], at)
 
-func spawn_foe(family: String, at: Vector3, rank: int = 0) -> AshFoe:
-	var foe := AshFoe.new()
-	foe.family = family
-	foe.rank = rank
+func spawn_goblin(kind: String, at: Vector3) -> AshFoe:
+	var foe: AshFoe = GOBLIN_FOE.new()
+	foe.kind = kind
 	foe.arena_level = arena_number
 	foe.position = at
 	add_child(foe)
 	foes.append(foe)
 	return foe
+
+func spawn_boss(at: Vector3) -> AshFoe:
+	var boss: AshFoe = GOBLIN_BOSS.new()
+	boss.arena_level = arena_number
+	boss.position = at
+	add_child(boss)
+	foes.append(boss)
+	return boss
 
 func enemy_defeated(foe: AshFoe) -> void:
 	run.kills += 1
@@ -227,8 +239,8 @@ func resolve_mystery(forced_outcome: int = -1) -> void:
 			arena.doors.clear()
 			for gate in arena.door_nodes:
 				gate.position.y = 0
-			spawn_foe("stone", Vector3(-3, 0.1, -4))
-			spawn_foe("briar", Vector3(3, 0.1, -6))
+			spawn_goblin("club", Vector3(-3, 0.1, -4))
+			spawn_goblin("caster", Vector3(3, 0.1, -6))
 		1, 3:
 			var stat: String = ["Vitality", "Strength", "Swiftness"][rng.randi_range(0, 2)]
 			run.upgrade(stat, 0.9 if outcome == 1 else 1.1)

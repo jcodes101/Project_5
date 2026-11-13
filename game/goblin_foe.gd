@@ -153,6 +153,8 @@ func _physics_process(delta: float) -> void:
 			velocity.z = 0
 			_animate("idle", delta)
 	velocity.y = -0.5 if is_on_floor() else velocity.y - 22.0 * delta
+	velocity += knockback
+	knockback = knockback.move_toward(Vector3.ZERO, 18 * delta)
 	move_and_slide()
 	visual.scale = Vector3.ONE * (1.0 + flash * 0.22)
 	if kind == "missile" and not dead:

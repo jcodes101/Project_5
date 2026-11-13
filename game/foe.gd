@@ -26,6 +26,7 @@ var enraged := false
 var flash := 0.0
 var gait := 0.0
 var stagger_duration := 0.0
+var knockback := Vector3.ZERO
 
 func _ready() -> void:
 	game = get_parent()
@@ -134,6 +135,8 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 0
 		velocity.z = 0
 	velocity.y = -0.5 if is_on_floor() else velocity.y - 22 * delta
+	velocity += knockback
+	knockback = knockback.move_toward(Vector3.ZERO, 18 * delta)
 	move_and_slide()
 	visual.scale = Vector3.ONE * (1.65 if rank > 0 else 1.0) * (1.0 + flash * 0.35)
 	if state != "windup":

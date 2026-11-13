@@ -31,6 +31,8 @@ func reset(run_seed: int) -> void:
 	var flask := AshData.item("flask")
 	flask.amount = 3
 	inventory.append(flask)
+	for kind in ["dagger", "greatsword", "spear"]:
+		inventory.append(AshData.item(kind))
 	changed.emit()
 
 func equipped() -> Dictionary:
@@ -107,7 +109,7 @@ func grant_mastery(amount: int) -> void:
 	weapon.xp += amount
 	if old < 50 and weapon.xp >= 50:
 		message.emit("MASTERY AWAKENED  ·  Press C for your special attack")
-	elif old < 25 and weapon.xp >= 25:
+	if old < 25 and weapon.xp >= 25:
 		message.emit("COMBO UNLOCKED  ·  Chain three light attacks")
 	changed.emit()
 

@@ -45,6 +45,13 @@ func _ready() -> void:
 			start_run(int(argument.trim_prefix("--seed=")))
 
 func install_inputs() -> void:
+	for number in range(1, 5):
+		var shortcut := "weapon_%d" % number
+		if not InputMap.has_action(shortcut):
+			InputMap.add_action(shortcut)
+		var key := InputEventKey.new()
+		key.physical_keycode = KEY_1 + number - 1
+		InputMap.action_add_event(shortcut, key)
 	var keys := {"forward": [KEY_W, KEY_UP], "back": [KEY_S, KEY_DOWN], "left": [KEY_A, KEY_LEFT], "right": [KEY_D, KEY_RIGHT], "dodge": [KEY_SPACE], "parry": [KEY_F], "interact": [KEY_E], "inventory": [KEY_TAB], "pause": [KEY_ESCAPE], "lock": [KEY_Q], "heal": [KEY_R], "special": [KEY_C]}
 	for action_name in keys:
 		if not InputMap.has_action(action_name):
@@ -95,6 +102,7 @@ func build_environment() -> void:
 
 func start_run(chosen_seed: int = -1) -> void:
 	var next_seed := chosen_seed if chosen_seed >= 0 else int(Time.get_unix_time_from_system()) % 1000000
+	player.special_cooldowns.clear()
 	run.reset(next_seed)
 	rng.seed = next_seed
 	biomes = ["crypt", "briar", "forge"]

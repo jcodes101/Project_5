@@ -124,7 +124,8 @@ static func knight(parent: Node3D) -> Node3D:
 	for side in [-1, 1]:
 		box(root, Vector3(side * 0.18, 0.3, 0), Vector3(0.22, 0.6, 0.27), Color("3f4037"))
 		box(root, Vector3(side * 0.42, 1.12, 0), Vector3(0.26, 0.28, 0.35), Color("747465"), true)
-		box(root, Vector3(side * 0.41, 0.86, 0), Vector3(0.17, 0.43, 0.19), WOOD)
+		var arm := box(root, Vector3(side * 0.41, 0.86, 0), Vector3(0.17, 0.43, 0.19), WOOD)
+		arm.name = "LeftArm" if side < 0 else "RightArm"
 	box(root, Vector3(-0.02, 0.92, 0.25), Vector3(0.58, 0.98, 0.055), Color("63352d"), true)
 	return root
 

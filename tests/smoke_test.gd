@@ -45,7 +45,7 @@ func run_checks() -> void:
 	player.facing = Vector3.FORWARD
 	player.stamina = 100
 	player.begin_attack(false)
-	check(player.stamina == 90, "Sword light attack spends ten stamina")
+	check(player.stamina == 85, "Sword light attack spends fifteen stamina")
 	var old_hp := foe.health
 	player.strike()
 	check(foe.health < old_hp, "Player strike damages a foe in reach and facing arc")
@@ -89,7 +89,7 @@ func run_checks() -> void:
 	game.run.add_item(AshData.item("flask"))
 	check(game.run.inventory[1].amount == 5, "Consumables stack to five")
 	game.run.add_item(AshData.item("flask"))
-	check(game.run.inventory.size() == 3 and game.run.inventory[2].amount == 1, "Sixth consumable starts a new slot")
+	check(game.run.inventory.size() == 6 and game.run.inventory[5].amount == 1, "Sixth consumable starts a new slot")
 	while game.run.inventory.size() < 12:
 		game.run.add_item(AshData.item("dagger"))
 	check(not game.run.add_item(AshData.item("spear")), "Full inventory rejects a new weapon")
@@ -143,7 +143,7 @@ func run_checks() -> void:
 		match outcome:
 			0: check(game.ambush and game.foes.size() == 2 and game.arena.doors.is_empty(), "Mystery ambush closes progression and creates enemies")
 			1: check(game.run.max_health < 100 or game.run.damage_scale < 1 or game.run.speed_scale < 1, "Mystery curse lowers a stat")
-			2: check(game.run.currency == 75 or game.run.inventory.size() == 1, "Mystery robbery takes currency or an item")
+			2: check(game.run.currency == 75 or game.run.inventory.size() == 4, "Mystery robbery takes currency or an item")
 			3: check(game.run.max_health > 100 or game.run.damage_scale > 1 or game.run.speed_scale > 1, "Mystery blessing raises a stat")
 			4: check(game.pickups.size() == 1, "Mystery remains provide a loot pickup")
 	var loot_rng := RandomNumberGenerator.new()

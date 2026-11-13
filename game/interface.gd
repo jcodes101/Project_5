@@ -21,6 +21,8 @@ var compass: Label
 var prompt: Label
 var toast_label: Label
 var toast_time := 0.0
+var unlock_messages: Array[String] = []
+var special_status: Label
 var room_label: Label
 var room_sub: Label
 var room_time := 0.0
@@ -140,8 +142,10 @@ func build_hud() -> void:
 	mastery_bar = progress(hud, Vector2(40, 616), Vector2(220, 4), AshArt.GOLD)
 	mastery_bar.max_value = 50
 	flask_text = label(hud, "", Vector2(40, 632), Vector2(400, 30), 14)
-	label(hud, "LMB  Light   /   RMB  Heavy   /   SPACE  Dodge   /   F  Parry   /   Q  Lock   /   C  Special", Vector2(0, 680), Vector2(1280, 25), 13, Color("b8b39b")).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label(hud, "LMB  Light   /   RMB  Heavy   /   SPACE  Dodge   /   F  Parry   /   Q  Lock   /   C  Special", Vector2(0, 667), Vector2(1280, 25), 13, Color("b8b39b")).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label(hud, "WASD  Move   ·   Mouse  Look   ·   TAB  Inventory   ·   ESC  Pause", Vector2(770, 638), Vector2(475, 25), 12, Color("b8b39b")).horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	label(hud, "1 Sword  /  2 Daggers  /  3 Greatsword  /  4 Spear", Vector2(0, 693), Vector2(1280, 24), 13, Color("b8b39b")).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	special_status = label(hud, "", Vector2(430, 632), Vector2(330, 28), 14, AshArt.GOLD)
 	prompt = label(hud, "", Vector2(250, 527), Vector2(780, 40), 19, AshArt.GOLD)
 	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	toast_label = label(root, "", Vector2(200, 142), Vector2(880, 55), 19, AshArt.GOLD, true)
@@ -209,7 +213,7 @@ func show_help() -> void:
 	clear_modal("help")
 	var card := panel(modal, Vector2(190, 90), Vector2(900, 540))
 	label(card, "Learn to outlast the dark", Vector2(32, 22), Vector2(820, 55), 36, AshArt.GOLD, true)
-	label(card, "WASD  Move     Mouse  Look     Q / Middle mouse  Lock on\n\nLMB  Light attack     RMB  Heavy attack     SPACE  Dodge\nF  Parry     R  Drink ember draught     C  Mastery special\nE  Interact / collect     TAB  Inventory     ESC  Pause\n\nRed ground marks an incoming strike. Dodge through its impact,\nor face your foe and parry just before it lands. Heavy attacks\nbreak poise. Stamina regenerates when you leave an opening.\n\nAfter combat, collect your loot and walk through a lit doorway.\nAt rest sites, choose ONE: healing, a stat upgrade, or mastery.\nDeath ends the run. Defeat the fifth arena's king to win.", Vector2(34, 96), Vector2(835, 360), 18)
+	label(card, "WASD  Move     Mouse  Look     Q / Middle mouse  Lock on\n\nLMB  Light attack     RMB  Heavy attack     SPACE  Dodge\nF  Parry     R  Drink ember draught     C  Mastery special\nE  Interact / collect     TAB  Inventory     ESC  Pause\n1 Sword / 2 Daggers / 3 Greatsword / 4 Spear\nRed ground marks an incoming strike. Dodge through its impact,\nor face your foe and parry just before it lands. Heavy attacks\nbreak poise. Stamina regenerates when you leave an opening.\n\nAfter combat, collect your loot and walk through a lit doorway.\nAt rest sites, choose ONE: healing, a stat upgrade, or mastery.\nDeath ends the run. Defeat the fifth arena's king to win.", Vector2(34, 96), Vector2(835, 360), 18)
 	button(card, "Return", Vector2(32, 474), Vector2(210, 43), func() -> void:
 		if previous == "title": show_title()
 		else: show_pause())
@@ -322,8 +326,12 @@ func show_result(won: bool) -> void:
 	button(modal, "Retry this seed", Vector2(500, 561), Vector2(280, 40), func() -> void: game.start_run(game.run.seed_value))
 
 func toast(text: String) -> void:
+	if toast_time > 0 and "UNLOCKED" in toast_label.text:
+		if "UNLOCKED" in text:
+			unlock_messages.append(text)
+		return
 	toast_label.text = text
-	toast_time = 4.0
+	toast_time = 8.0 if "UNLOCKED" in text else 4.0
 	toast_label.move_to_front()
 
 func announce(title: String, subtitle: String) -> void:
@@ -352,8 +360,14 @@ func refresh() -> void:
 
 func _process(delta: float) -> void:
 	toast_time = maxf(0, toast_time - delta)
+	if toast_time <= 0 and not unlock_messages.is_empty():
+		toast(unlock_messages.pop_front())
 	toast_label.modulate.a = minf(1, toast_time)
 	if is_instance_valid(game.player):
+		var equipped: Dictionary = game.run.equipped()
+		if not equipped.is_empty():
+			var remaining: float = game.player.special_cooldowns.get(equipped.kind, 0.0)
+			special_status.text = "C Special: 50 XP required" if equipped.xp < 50 else ("C Special: %.1fs" % remaining if remaining > 0 else "C Special ready / 30 stamina")
 		stamina_bar.value = game.player.stamina
 		damage_overlay.color.a = game.player.hit_flash * 0.5
 		var heading := fposmod(rad_to_deg(game.player.yaw), 360)

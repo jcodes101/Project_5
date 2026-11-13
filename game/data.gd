@@ -4,10 +4,10 @@ extends RefCounted
 const RARITIES := ["Common", "Uncommon", "Rare", "Epic", "Legendary"]
 const COLORS := [Color("aaa18a"), Color("8eab80"), Color("8da5b3"), Color("ae8cba"), Color("c2a46b")]
 const WEAPONS := {
-	"dagger": {"name": "Grave Dagger", "min": 8, "max": 15, "cost": 5, "reach": 1.8, "windup": 0.13, "recovery": 0.23},
-	"sword": {"name": "Pilgrim's Sword", "min": 10, "max": 20, "cost": 10, "reach": 2.6, "windup": 0.23, "recovery": 0.33},
-	"greatsword": {"name": "Oathbreaker", "min": 18, "max": 30, "cost": 18, "reach": 3.1, "windup": 0.46, "recovery": 0.5},
-	"spear": {"name": "Briar Spear", "min": 10, "max": 18, "cost": 9, "reach": 3.9, "windup": 0.29, "recovery": 0.32}
+	"dagger": {"name": "Grave Dagger", "min": 8, "max": 15, "cost": 10, "slow": 0.0, "hits": [8, 8, 12], "heavy": 15, "special": [6, 6, 6, 6, 6], "cooldown": 8.0, "combo": "Triple Fang", "technique": "Flurry Rush", "reach": 1.8, "windup": 0.13, "recovery": 0.23},
+	"sword": {"name": "Pilgrim's Sword", "min": 10, "max": 20, "cost": 15, "slow": 0.05, "hits": [10, 10, 15], "heavy": 20, "special": [35], "cooldown": 10.0, "combo": "Knight's Rhythm", "technique": "Riposte Stance", "reach": 2.6, "windup": 0.23, "recovery": 0.33},
+	"greatsword": {"name": "Oathbreaker", "min": 18, "max": 30, "cost": 30, "slow": 0.12, "hits": [18, 18, 25], "heavy": 30, "special": [45], "cooldown": 12.0, "combo": "Crushing Sequence", "technique": "Titan's Cleave", "reach": 3.1, "windup": 0.46, "recovery": 0.5},
+	"spear": {"name": "Briar Spear", "min": 10, "max": 18, "cost": 20, "slow": 0.10, "hits": [10, 10, 14], "heavy": 18, "special": [12, 12, 16], "cooldown": 10.0, "combo": "Serpent's Reach", "technique": "Spear Cyclone", "reach": 3.9, "windup": 0.29, "recovery": 0.32}
 }
 
 static func item(kind: String, rarity: int = 0) -> Dictionary:

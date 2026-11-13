@@ -30,6 +30,7 @@ godot --path . -- --seed=719
 | --- | --- |
 | WASD / arrow keys | Move relative to camera |
 | Mouse | Orbit camera |
+| 1 / 2 / 3 / 4 | Equip sword / daggers / greatsword / spear |
 | Q / middle mouse | Toggle target lock |
 | Left click | Light attack; time repeated clicks to chain attacks |
 | Right click | Heavy attack; breaks enemy poise |
@@ -51,7 +52,7 @@ Face an enemy to parry its impact. A successful parry staggers it for 1.5 second
 - **Merchant.** Buy items for 100 / 125 / 150 / 175 / 200 embers according to rarity. Sell one item for 50% of its new price, rounded down. Equip another weapon before selling or dropping your current weapon. Merchant stock is replenishable during the visit.
 - **Mystery.** Five equally likely outcomes: an extra ambush, a random 10% stat curse, loss of 25% currency or a carried item, a random 10% stat blessing, or a loot offering. An ambush does not count as a main arena.
 - **Loot.** Regular enemies drop an item 60% of the time; minibosses and bosses always drop one. Normal rarity odds are 59 / 25 / 12 / 3 / 1 percent. Boss drops are rare or better. Enemy families have different loot pools. Embers are awarded directly; items require E to collect.
-- **Inventory.** Twelve slots, one weapon per slot, other items stacked to five. Four weapon families match the brief's base damage ranges. Rarity improves damage or healing. Mastery is stored on each individual weapon: kills grant 5 XP, 25 XP unlocks a third-strike combo finisher, and 50 XP unlocks C. Mastery Shards add 20 XP.
+- **Inventory.** Twelve slots, one weapon per slot, other items stacked to five. Four weapon families match the brief's base damage ranges. Rarity improves damage or healing. Mastery is stored on each individual weapon: kills grant 5 XP, 25 XP unlocks a third-strike combo finisher, and 50 XP unlocks C. Specials cost 30 stamina and have weapon-specific cooldowns. Mastery Shards add 20 XP.
 - **Win / lose.** Defeating the final boss wins. Zero vitality ends the run. Start a fresh run or retry the same seed from the result screen. There is no persistent progression or mid-run save.
 
 ## Project layout
@@ -90,3 +91,18 @@ godot --path . --script res://tests/visual_check.gd
 ```
 
 Optional: `python tools/generate_audio.py` recreates the included WAV assets using only Python's standard library. Menus use locally available system serif fonts with fallbacks; no proprietary font files are bundled.
+
+## Weapon combat update
+
+Every run starts with a sword, paired daggers, a greatsword, and a spear. Switch with 1?4 while idle. Each individual weapon keeps its own mastery. Before 25 XP, light combos have two hits; at 25 XP, the third hit unlocks. Press consecutive light inputs within 0.8 seconds; inputs near the end of a light attack can queue the next strike. At 50 XP, C unlocks that weapon's physical technique. Unlock notifications explain the controls.
+
+| Weapon | Light hits | Heavy | Light / heavy stamina | Movement and roll slowdown | C special / cooldown |
+| --- | --- | --- | --- | --- | --- |
+| Sword | 10 / 10 / 15 | 20 | 15 / 30 | 5% | Riposte Stance: 35 counter damage / 10s |
+| Daggers | 8 / 8 / 12 | 15 | 10 / 20 | None | Flurry Rush: five 6-damage strikes / 8s |
+| Greatsword | 18 / 18 / 25 | 30 | 30 / 60 | 12% | Titan's Cleave: 45 damage / 12s |
+| Spear | 10 / 10 / 14 | 18 | 20 / 40 | 10% | Spear Cyclone: 12 + 12 + 16 damage / 10s |
+
+Base damage is modified by existing rarity, strength, and stagger bonuses. Guardbreaker staggers regular enemies for 2 seconds and minibosses/bosses for 1 second. Riposte Stance lasts one second and counters only if attacked. Heavy attacks commit through incoming damage; dagger flurries can be interrupted. Rolls use camera-relative directional input, or backward when no direction is held, with a 0.3-second invulnerability window and a centered, tucked visual rotation. The collision capsule remains upright.
+
+Run `godot --headless --path . --script res://tests/combat_check.gd` for the focused weapon and roll checks.
